@@ -1,0 +1,39 @@
+apply plugin: 'idea'
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+    }
+    test {
+        java {
+            srcDir 'test'
+        }
+    }
+}
+
+dependencies {
+    testCompile 'junit:junit:4.8','commons-io:commons-io:2.2'
+}
+
+clean << {
+    println 'Cleaning dirs [out]'
+    def dir = new File('out')
+    dir.deleteDir()
+}
+
+uploadArchives {
+    def dist = 'dist'
+    repositories {
+        flatDir {
+            dirs dist
+        }
+    }
+    println String.format('Publishing to dir [%s]', dist)
+}
