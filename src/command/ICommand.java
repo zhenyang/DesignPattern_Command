@@ -1,5 +1,5 @@
 package command;
 
 public interface ICommand {
-    void execute(String path);
+    boolean execute(String path);
 }

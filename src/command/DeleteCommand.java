@@ -2,12 +2,11 @@ package command;
 
 import java.io.IOException;
 
-public class CheckOutCodeCommand implements ICommand {
-
+public class DeleteCommand implements ICommand {
     private final String shellCommand;
 
-    public CheckOutCodeCommand() {
-        shellCommand = "git clone git://github.com/khu/emptyrepo.git ";
+    public DeleteCommand() {
+        shellCommand = "rm -rf ";
     }
 
     public boolean execute(String path) {
@@ -16,9 +15,11 @@ public class CheckOutCodeCommand implements ICommand {
             process.waitFor();
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            return false;
         } catch (InterruptedException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            return false;
         }
-        return false;
+        return true;
     }
 }

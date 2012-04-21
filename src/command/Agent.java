@@ -2,9 +2,8 @@ package command;
 
 public class Agent {
 
-    public void executeTaskFrom(Server server) {
+    public boolean executeTaskFrom(Server server) {
         ICommand command = server.acceptRequest();
-        command.execute("target");
-
+        return command.execute("target");
     }
 }

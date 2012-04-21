@@ -14,4 +14,8 @@ public class Server {
     public ICommand acceptRequest() {
         return command;
     }
+
+    public void setCommand(ICommand command) {
+        this.command = command;
+    }
 }

@@ -4,6 +4,7 @@ public class EmptyCommand implements ICommand {
     public EmptyCommand() {
     }
 
-    public void execute(String path) {
+    public boolean execute(String path) {
+        return true;
     }
 }

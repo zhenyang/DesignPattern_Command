@@ -1,6 +1,5 @@
-import command.Agent;
-import command.CheckOutCodeCommand;
-import command.Server;
+package command;
+
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.core.Is;
 import org.junit.After;
@@ -9,12 +8,15 @@ import org.junit.Test;
 import java.io.File;
 import java.util.Arrays;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class AgentTest {
 
     private Agent agent = new Agent();
+    private Server server = new Server();
 
     @After
     public void tearDown() throws Exception {
@@ -25,7 +27,7 @@ public class AgentTest {
 
     @Test
     public void should_do_nothing_when_receive_empty_command_from_server() throws Exception {
-        Server server = new Server();
+        server.setCommand(new EmptyCommand());
 
         File fileBefore = new File(".");
         agent.executeTaskFrom(server);
@@ -35,18 +37,33 @@ public class AgentTest {
     }
 
     @Test
-    public void should_clone_git_repo_when_ask_server_for_command() throws Exception {
-        Server server = new Server(new CheckOutCodeCommand());
+    public void should_clone_git_repo_when_receive_check_out_code_command() throws Exception {
+        server.setCommand(new CheckOutCodeCommand());
 
         agent.executeTaskFrom(server);
 
         File file = new File("./target");
         assertThat(file.list(), notNullValue());
     }
-//
-//    @Test
-//    public void test_command_fail_should_return_false() throws Exception {
-//        agent.askForCommand(new Server(new PullCode(1, "impossible command")));
-//        assertThat(agent.execute(), is(false));
-//    }
+
+    @Test
+    public void should_remove_directory_when_receive_delete_command() throws Exception {
+        server.setCommand(new CheckOutCodeCommand());
+        agent.executeTaskFrom(server);
+
+        server.setCommand(new DeleteCommand());
+        agent.executeTaskFrom(server);
+
+        File file = new File("./target");
+        assertThat(file.list(), nullValue());
+    }
+
+    @Test
+    public void should_return_false_when_command_fail_to_execute() throws Exception {
+        server.setCommand(new ErrorCommand());
+        boolean result = agent.executeTaskFrom(server);
+
+        assertThat(result, is(false));
+    }
+
 }

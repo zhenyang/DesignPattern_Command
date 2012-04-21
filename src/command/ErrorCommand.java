@@ -2,23 +2,18 @@ package command;
 
 import java.io.IOException;
 
-public class CheckOutCodeCommand implements ICommand {
-
-    private final String shellCommand;
-
-    public CheckOutCodeCommand() {
-        shellCommand = "git clone git://github.com/khu/emptyrepo.git ";
-    }
-
+class ErrorCommand implements ICommand {
     public boolean execute(String path) {
         try {
-            Process process = Runtime.getRuntime().exec(shellCommand + path);
+            Process process = Runtime.getRuntime().exec("badcommand "+ path);
             process.waitFor();
+            return true;
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            return false;
         } catch (InterruptedException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            return false;
         }
-        return false;
     }
 }
