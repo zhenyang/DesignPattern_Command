@@ -1,9 +1,9 @@
 package command;
 
 public class Server {
-    private ICommand command;
+    private Command command;
 
-    public Server(ICommand command) {
+    public Server(Command command) {
         this.command = command;
     }
 
@@ -11,11 +11,11 @@ public class Server {
         this.command = new EmptyCommand();
     }
 
-    public ICommand acceptRequest() {
+    public Command acceptRequest() {
         return command;
     }
 
-    public void setCommand(ICommand command) {
+    public void setCommand(Command command) {
         this.command = command;
     }
 }

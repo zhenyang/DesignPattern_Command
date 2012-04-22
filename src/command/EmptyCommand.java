@@ -1,10 +1,12 @@
 package command;
 
-public class EmptyCommand implements ICommand {
+public class EmptyCommand extends Command {
     public EmptyCommand() {
+        super("");
     }
 
-    public boolean execute(String path) {
-        return true;
+    @Override
+    public CommandResult execute(String path) {
+        return new CommandResult(true,"");
     }
 }

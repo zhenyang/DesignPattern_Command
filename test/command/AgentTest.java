@@ -3,10 +3,10 @@ package command;
 import org.apache.commons.io.FileUtils;
 import org.hamcrest.core.Is;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -15,13 +15,18 @@ import static org.junit.Assert.assertThat;
 
 public class AgentTest {
 
-    private Agent agent = new Agent();
-    private Server server = new Server();
+    private Agent agent;
+    private Server server;
+
+    @Before
+    public void setUp() throws Exception {
+        agent = new Agent();
+        server = new Server();
+    }
 
     @After
     public void tearDown() throws Exception {
         File targetDir = new File("./target");
-        System.out.println("In After: about to delete:" + Arrays.toString(targetDir.list()));
         FileUtils.deleteDirectory(targetDir);
     }
 
@@ -61,9 +66,20 @@ public class AgentTest {
     @Test
     public void should_return_false_when_command_fail_to_execute() throws Exception {
         server.setCommand(new ErrorCommand());
-        boolean result = agent.executeTaskFrom(server);
+        CommandResult result = agent.executeTaskFrom(server);
 
-        assertThat(result, is(false));
+        assertThat(result.isSuccess(), is(false));
     }
 
+    @Test
+    public void should_report_result_and_output_to_server() throws Exception {
+        server.setCommand(new CheckOutCodeCommand());
+        agent.executeTaskFrom(server);
+
+        server.setCommand(new ListDirectoryCommand());
+        CommandResult result = agent.executeTaskFrom(server);
+
+        assertThat(result.isSuccess(), is(true));
+        assertThat(result.getOutput(), notNullValue());
+    }
 }
