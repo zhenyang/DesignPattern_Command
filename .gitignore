@@ -1,0 +1,10 @@
+#ignore IntelliJ project files
+*.iml
+*.iws
+*.ipr
+.idea/*
+.idea
+#ignore build outputs
+out/
+build/
+.gradle/
